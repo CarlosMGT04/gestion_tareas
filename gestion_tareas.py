@@ -67,7 +67,7 @@ def reiniciar_ids():
     """Reinicia los IDs de las tareas."""
     with sqlite3.connect(DB_FILE) as conn:
         cursor = conn.cursor()
-        cursor.execute("VACUUM")  #SQLite automáticamente reasigna los IDs
+        cursor.execute("VACUUM")
 
 def exportar_tareas():
     """Exporta las tareas a un archivo JSON."""
@@ -121,11 +121,9 @@ crear_tabla()
 root = tk.Tk()
 root.title("Gestor de Tareas")
 
-#Frame principal
 frame = tk.Frame(root)
 frame.pack(padx=10, pady=10)
 
-#Entrada de datos
 tk.Label(frame, text="Título:").grid(row=0, column=0, sticky=tk.W, padx=5, pady=5)
 entry_titulo = tk.Entry(frame, width=40)
 entry_titulo.grid(row=0, column=1, padx=5, pady=5)
@@ -134,7 +132,6 @@ tk.Label(frame, text="Descripción:").grid(row=1, column=0, sticky=tk.W, padx=5,
 entry_descripcion = tk.Entry(frame, width=40)
 entry_descripcion.grid(row=1, column=1, padx=5, pady=5)
 
-#Botones de agregar y gestión de datos
 action_button_frame = tk.Frame(frame)
 action_button_frame.grid(row=2, column=0, columnspan=2, pady=10)
 
@@ -142,7 +139,6 @@ tk.Button(action_button_frame, text="Agregar Tarea", width=15, command=agregar_t
 tk.Button(action_button_frame, text="Exportar Tareas", width=15, command=exportar_tareas).grid(row=0, column=1, padx=10)
 tk.Button(action_button_frame, text="Importar Tareas", width=15, command=importar_tareas).grid(row=0, column=2, padx=10)
 
-#Treeview para mostrar tareas
 treeview = ttk.Treeview(frame, columns=("ID", "Título", "Descripción", "Estado"), show="headings", height=10)
 treeview.grid(row=3, column=0, columnspan=2, pady=10)
 
@@ -156,12 +152,10 @@ treeview.column("Título", anchor="center", width=150)
 treeview.column("Descripción", anchor="center", width=200)
 treeview.column("Estado", anchor="center", width=100)
 
-#Scrollbar
 scrollbar = ttk.Scrollbar(frame, orient="vertical", command=treeview.yview)
 scrollbar.grid(row=3, column=2, sticky="ns")
 treeview.configure(yscrollcommand=scrollbar.set)
 
-#Botones para acciones específicas
 action_button_frame2 = tk.Frame(frame)
 action_button_frame2.grid(row=4, column=0, columnspan=2, pady=10)
 
@@ -169,6 +163,5 @@ tk.Button(action_button_frame2, text="Marcar Completada", width=20, command=lamb
 tk.Button(action_button_frame2, text="Desmarcar", width=20, command=lambda: desmarcar_tarea(treeview.item(treeview.selection())["values"][0])).grid(row=0, column=1, padx=10)
 tk.Button(action_button_frame2, text="Eliminar Tarea", width=20, command=lambda: eliminar_tarea(treeview.item(treeview.selection())["values"][0])).grid(row=0, column=2, padx=10)
 
-# ------------------ Inicio del Programa ------------------
 refrescar_lista()
 root.mainloop()
